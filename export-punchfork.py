@@ -219,12 +219,14 @@ if len(sys.argv) == 2:
 else:
   zipfilename = sys.argv[2]
 
-with zipfile.ZipFile(zipfilename, "w") as zf:
-  sys.stderr.write("Archiving %s to %s\n" % (username, zipfilename))
-  pfe = PunchforkExporter(username)
-  pfe.copy_assets(zf)
-  pfe.load_user(zf)
-  pfe.load_recipe_index(zf)
-  pfe.load_recipes(zf)
-  sys.stderr.write("Archived %s to %s\n" % (username, zipfilename))
+sys.stderr.write("Archiving %s to %s\n" % (username, zipfilename))
+
+zf = zipfile.ZipFile(zipfilename, "w")
+pfe = PunchforkExporter(username)
+pfe.copy_assets(zf)
+pfe.load_user(zf)
+pfe.load_recipe_index(zf)
+pfe.load_recipes(zf)
+zf.close()
+sys.stderr.write("Archived %s to %s\n" % (username, zipfilename))
 
