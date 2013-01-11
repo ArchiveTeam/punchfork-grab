@@ -32,7 +32,7 @@ class PunchforkExporter(object):
     self._progress("done.\n")
 
     # parse
-    html = BeautifulSoup(r.text)
+    html = BeautifulSoup(r.text, "lxml")
     data = self.data
     data["page_title"] = html.title.string
     marquee_title = html.find(id="marquee-title")
@@ -64,7 +64,7 @@ class PunchforkExporter(object):
     self._progress("\r - Found %d cards.\n" % len(recipe_cards))
 
     # generate html
-    soup = BeautifulSoup(self._index_template)
+    soup = BeautifulSoup(self._index_template, "lxml")
     soup.title.string = self.data["page_title"]
     marquee_title = soup.find(id="marquee-title")
     marquee_title.h1.string = self.data["marquee_title_name"]
@@ -84,7 +84,7 @@ class PunchforkExporter(object):
     for recipe_card in self.recipe_cards:
       self._progress("\r - Added %d cards to index." % i)
       i += 1
-      card_el = BeautifulSoup(recipe_card)
+      card_el = BeautifulSoup(recipe_card, "lxml")
       likes_a = card_el.find("a", "svc")
       likes_span = soup.new_tag("span")
       likes_span["class"] = "metric svc"
@@ -108,7 +108,7 @@ class PunchforkExporter(object):
       self._progress("\r - Saved %d recipes." % i)
       i += 1
 
-      recipe_href = BeautifulSoup(recipe_card).div.a["href"]
+      recipe_href = BeautifulSoup(recipe_card, "lxml").div.a["href"]
       recipe_name = recipe_href.split("/")[2]
 
       r = requests.get("http://punchfork.com/recipe/%s" % recipe_name,
@@ -117,7 +117,7 @@ class PunchforkExporter(object):
 
       # replace some parts
       t = r.text
-      soup = BeautifulSoup(re.sub("<script(.|\n)+?</script>", "", t, re.DOTALL))
+      soup = BeautifulSoup(re.sub("<script(.|\n)+?</script>", "", t, re.DOTALL), "lxml")
       for tag in soup.find_all("script"):
         tag.extract()
       for tag in soup.find_all("link", rel="stylesheet"):
