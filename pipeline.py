@@ -135,7 +135,7 @@ pipeline = Pipeline(
       ItemInterpolation("%(punchfork_seed)s")
     ],
     max_tries = 2,
-    accept_on_exit_code = [ 0, 4, 6, 8 ],
+    accept_on_exit_code = [ 0, 3, 4, 6, 8 ],
   ),
   ConditionalTask(lambda item: (item["punchfork_user"]),
     ExternalProcess("ZIP export", [
