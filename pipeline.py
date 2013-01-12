@@ -26,7 +26,7 @@ if StrictVersion(seesaw.__version__) < StrictVersion("0.0.10"):
 
 
 USER_AGENT = "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27"
-VERSION = "20130111.01"
+VERSION = "20130112.01"
 
 class ConditionalTask(Task):
   def __init__(self, condition_function, inner_task):
@@ -146,7 +146,7 @@ pipeline = Pipeline(
   ),
   ExternalProcess("User extraction", [
     "./extract-users.sh",
-    ItemInterpolation("%(data_dir)%s"),
+    ItemInterpolation("%(data_dir)s"),
     ItemInterpolation("%(data_dir)s/%(warc_file_base)s.users.txt")
   ]),
   PrepareStatsForTracker(
