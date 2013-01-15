@@ -108,7 +108,7 @@ project = Project(
     <h2>Punchfork <span class="links"><a href="http://punchfork.com/">Website</a> &middot; <a href="http://tracker.archiveteam.org/punchfork/">Leaderboard</a></span></h2>
     <p><i>Punchfork</i> is closing.</p>
   """,
-  utc_deadline = datetime.datetime(2013,02,01, 23,59,0)
+  utc_deadline = datetime.datetime(2013,03,14, 23,59,0)
 )
 
 pipeline = Pipeline(
