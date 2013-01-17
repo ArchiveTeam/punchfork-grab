@@ -53,13 +53,14 @@ class PunchforkExporter(object):
                                 "_": "%0.10f" % random.random() },
                        headers=self.headers)
       r.raise_for_status()
+      json_data = r.json()
 
-      recipe_cards.extend(r.json["cards"])
+      recipe_cards.extend(json_data["cards"])
 
-      if len(r.json["cards"]) < 100:
+      if len(json_data["cards"]) < 100:
         start_date = None
       else:
-        start_date = r.json["next"]
+        start_date = json_data["next"]
 
     self._progress("\r - Found %d cards.\n" % len(recipe_cards))
 
