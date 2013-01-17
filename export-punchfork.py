@@ -53,7 +53,10 @@ class PunchforkExporter(object):
                                 "_": "%0.10f" % random.random() },
                        headers=self.headers)
       r.raise_for_status()
-      json_data = r.json()
+
+      json_data = r.json
+      if hasattr(json_data, "__call__"):
+        json_data = json_data()
 
       recipe_cards.extend(json_data["cards"])
 
