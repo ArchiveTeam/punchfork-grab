@@ -8,6 +8,7 @@ import urlparse
 import zipfile
 
 import requests
+import requests.exceptions
 from bs4 import BeautifulSoup
 
 
@@ -187,19 +188,22 @@ class PunchforkExporter(object):
         zipfile.write(os.path.join(root, name), os.path.join(self.username, "js", name))
 
   def image_to_file(self, href, zipfile):
-    if re.match("^//", href):
-      href = "http:"+href
-    if not href in self._images_cache:
-      r = requests.get(href, headers=self.headers)
-      r.raise_for_status()
+    try:
+      if re.match("^//", href):
+        href = "http:"+href
+      if not href in self._images_cache:
+        r = requests.get(href, headers=self.headers)
+        r.raise_for_status()
 
-      filename = os.path.basename(href)
-      zipfile.writestr("%s/img/%s" % (self.username, filename), r.content)
-      self._images_cache[href] = "img/%s" % filename
+        filename = os.path.basename(href)
+        zipfile.writestr("%s/img/%s" % (self.username, filename), r.content)
+        self._images_cache[href] = "img/%s" % filename
 
-    return self._images_cache[href]
+      return self._images_cache[href]
 
-
+    except requests.exceptions.ConnectionError:
+      sys.stderr.write("\n  Ignoring ConnectionError for %s\n" % href)
+      return "image-unavailable.png"
 
   def _path_to_template(self, template_name):
     return os.path.join(os.path.abspath(os.path.dirname(__file__)), "templates", template_name)
