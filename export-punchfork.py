@@ -174,7 +174,11 @@ class PunchforkExporter(object):
       new_script_tag.string = '// '
       soup.body.append(new_script_tag)
 
-      zipfile.writestr("%s/recipe/%s.html" % (self.username, recipe_name), soup.prettify(formatter="minimal").encode("utf-8"))
+      try:
+        zipfile.writestr("%s/recipe/%s.html" % (self.username, recipe_name), soup.prettify(formatter="minimal").encode("utf-8"))
+      except UnicodeDecodeError:
+        sys.stderr.write("\n  Skipping broken recipe with multiple encodings for user %s" % self.username)
+        pass
 
     self._progress("\r - Saved %d recipes.\n" % i)
 
